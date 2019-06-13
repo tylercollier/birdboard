@@ -18,4 +18,8 @@ class ProjectsController extends Controller
         Project::create($attributes);
         return redirect(route('projects.index'));
     }
+
+    public function show(Project $project) {
+        return view('projects.show', compact('project'));
+    }
 }
