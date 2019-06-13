@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql/data
+    ports:
+      - 33061:3306
+
+volumes:
+  mysql_data:
