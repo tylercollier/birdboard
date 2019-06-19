@@ -37,15 +37,25 @@ class ProjectsTest extends TestCase
     }
 
     public function test_a_user_can_view_a_project() {
-        $this->withoutExceptionHandling();
         $project = factory('App\Project')->create();
+        $this->actingAs($project->owner);
         $this->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->description);
     }
 
+    public function test_a_user_cannot_view_another_users_project() {
+        $project = factory('App\Project')->create();
+        $this->actingAs(factory('App\User')->create());
+        $this->get($project->path())->assertForbidden();
+    }
+
     public function test_a_project_requires_an_owner() {
         $attributes = factory('App\Project')->raw();
         $this->post('/projects', $attributes)->assertRedirect('login');
+    }
+
+    public function test_only_authenticated_users_can_view_projects() {
+        $this->get('/projects')->assertRedirect('login');
     }
 }
